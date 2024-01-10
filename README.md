@@ -6,8 +6,9 @@ A Cloud Native Buildpack for Leo
 
 | Environment Variable      | Description                                                                                                                                                                                                                                                                                       |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `$BP_LEO_VERSION` | Configure the version of rustup-init to install. It can be a specific version or a wildcard like `1.*`. It defaults to the latest `1.*` version.                                                                                                                                                  |
+| `$BP_LEO_VERSION` | Configure the version of leo to install. It can be a specific version or a wildcard like `1.*`. It defaults to the latest `1.*` version.                                                                                                                                                  |
 | `$BP_LEO_LIBC`    | Configure the libc implementation used by the installed toolchain. Available options: `gnu` or `musl`. Defaults to `gnu` for compatiblity. You do not need to set this option with the Paketo full/base/tiny/static stacks. It can be used for compatibility with more exotic or custom stacks.   |
+| `$BP_ENABLE_LEO_PROCESS`    | Configure the leo launch process, default: `true`. Defaults to `true` for `leo run`.   |
 
 ## Usage
 
