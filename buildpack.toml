@@ -1,0 +1,79 @@
+# Copyright (c) The Amphitheatre Authors. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+api = "0.8"
+
+[buildpack]
+  description = "A Cloud Native Buildpack with an order definition suitable for Leo applications"
+  homepage = "https://github.com/amp-buildpacks/leo"
+  id = "amp-buildpacks/leo"
+  keywords = ["leo", "Aleo"]
+  name = "Paketo Buildpack for Leo"
+  sbom-formats = ["application/vnd.cyclonedx+json", "application/vnd.syft+json"]
+  version = "0.1.0"
+
+  [[buildpack.licenses]]
+    type = "Apache-2.0"
+    uri = "https://github.com/amp-buildpacks/leo/blob/main/LICENSE"
+
+[metadata]
+  include-files = ["LICENSE", "NOTICE", "README.md", "bin/build", "bin/detect", "bin/main", "buildpack.toml"]
+  pre-package = "scripts/build.sh"
+
+  [[metadata.configurations]]
+    build = true
+    default = "true"
+    description = "enable the Leo run process"
+    name = "BP_ENABLE_LEO_PROCESS"
+
+  [[metadata.configurations]]
+    build = true
+    default = "1.10.0"
+    description = "the Leo version"
+    name = "BP_LEO_VERSION"
+
+  [[metadata.configurations]]
+    build = true
+    default = "gnu"
+    description = "libc implementation: gnu or musl"
+    name = "BP_LEO_LIBC"
+
+  [[metadata.dependencies]]
+    id = "leo-gnu"
+    name = "Leo (GNU libc)"
+    purl = "pkg:generic/leo@1.10.0"
+    sha256 = "abcd29454e940dd320b6915569f840a9ffe2515045c06667b5aa2ad34f7e0320"
+    uri = "https://github.com/AleoHQ/leo/releases/download/v1.10.0/leo-v1.10.0-x86_64-unknown-linux-gnu.zip"
+    stacks = ["*"]
+    version = "1.10.0"
+
+    [[metadata.dependencies.licenses]]
+      type = "GNU"
+      uri = "https://github.com/AleoHQ/leo/blob/v1.10.0/LICENSE.md"
+
+  [[metadata.dependencies]]
+    id = "leo-musl"
+    name = "Leo (musl libc)"
+    purl = "pkg:generic/leo@1.10.0"
+    sha256 = "508264f03760d0a0c9d8cd13c603e0e0d595388b3729762ebfbcc26abe46d667"
+    uri = "https://github.com/AleoHQ/leo/releases/download/v1.10.0/leo-v1.10.0-x86_64-unknown-linux-musl.zip"
+    stacks = ["*"]
+    version = "1.10.0"
+
+    [[metadata.dependencies.licenses]]
+      type = "GNU"
+      uri = "https://github.com/AleoHQ/leo/blob/v1.10.0/LICENSE.md"
+
+[[stacks]]
+  id = "*"
