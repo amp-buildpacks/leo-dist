@@ -1,4 +1,4 @@
-# `gcr.io/amp-buildpacks/leo`
+# `ghcr.io/amp-buildpacks/leo`
 
 A Cloud Native Buildpack for Leo
 
