@@ -15,11 +15,11 @@
 api = "0.8"
 
 [buildpack]
-  description = "A Cloud Native Buildpack with an order definition suitable for Leo applications"
+  description = "A buildpack for installing the appropriate Leo compiler distribution version"
   homepage = "https://github.com/amp-buildpacks/leo-dist"
   id = "amp-buildpacks/leo-dist"
   keywords = ["leo", "Aleo"]
-  name = "Paketo Buildpack for Leo"
+  name = "Paketo Buildpack for Leo Distribution"
   sbom-formats = ["application/vnd.cyclonedx+json", "application/vnd.syft+json"]
   version = "0.1.0"
 
