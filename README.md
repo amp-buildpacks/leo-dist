@@ -1,4 +1,4 @@
-# `ghcr.io/amp-buildpacks/leo`
+# `ghcr.io/amp-buildpacks/leo-dist`
 
 A Cloud Native Buildpack for Leo
 
@@ -17,7 +17,7 @@ A Cloud Native Buildpack for Leo
 ```shell
 pack build <image-name> \
     --path <leo-samples-path> \
-    --buildpack ghcr.io/amp-buildpacks/leo \
+    --buildpack ghcr.io/amp-buildpacks/leo-dist \
     --builder paketobuildpacks/builder-jammy-full
 ```
 
@@ -26,7 +26,7 @@ For example:
 ```shell
 pack build leo-sample \
     --path ./samples/leo/snarkvm \
-    --buildpack ghcr.io/amp-buildpacks/leo \
+    --buildpack ghcr.io/amp-buildpacks/leo-dist \
     --builder paketobuildpacks/builder-jammy-full
 ```
 

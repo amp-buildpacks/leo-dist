@@ -89,13 +89,13 @@ func (r Leo) Contribute(layer libcnb.Layer) (libcnb.Layer, error) {
 				Name:    "Leo",
 				Version: ver[1],
 				Type:    "UnknownPackage",
-				FoundBy: "amp-buildpacks/leo",
+				FoundBy: "amp-buildpacks/leo-dist",
 				Locations: []sbom.SyftLocation{
-					{Path: "amp-buildpacks/leo/leo/leo.go"},
+					{Path: "amp-buildpacks/leo-dist/leo/leo.go"},
 				},
 				Licenses: []string{"GNU"},
 				CPEs:     []string{fmt.Sprintf("cpe:2.3:a:leo:leo:%s:*:*:*:*:*:*:*", ver[1])},
-				PURL:     fmt.Sprintf("pkg:generic/leo@%s", ver[1]),
+				PURL:     fmt.Sprintf("pkg:generic/leo-dist@%s", ver[1]),
 			},
 		})
 		r.Logger.Debugf("Writing Syft SBOM at %s: %+v", sbomPath, dep)
