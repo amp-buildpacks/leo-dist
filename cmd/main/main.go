@@ -17,7 +17,7 @@ package main
 import (
 	"os"
 
-	leo "github.com/amp-buildpacks/leo/leo"
+	leo "github.com/amp-buildpacks/leo-dist/leo"
 	"github.com/buildpacks/libcnb"
 	"github.com/paketo-buildpacks/libpak/bard"
 )

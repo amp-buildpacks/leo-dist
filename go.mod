@@ -1,4 +1,4 @@
-module github.com/amp-buildpacks/leo
+module github.com/amp-buildpacks/leo-dist
 
 go 1.20
 

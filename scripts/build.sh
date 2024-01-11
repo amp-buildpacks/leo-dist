@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-GOOS="linux" go build -ldflags='-s -w' -o bin/main github.com/amp-buildpacks/leo/cmd/main
+GOOS="linux" go build -ldflags='-s -w' -o bin/main github.com/amp-buildpacks/leo-dist/cmd/main
 
 if [ "${STRIP:-false}" != "false" ]; then
   strip bin/main
