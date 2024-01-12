@@ -1,0 +1,20 @@
+github:
+  username: ${{ secrets.AMP_BUILDPACKS_DOCKERHUB_USERNAME }}
+  token:    ${{ secrets.AMP_BOT_GITHUB_TOKEN }}
+
+codeowners:
+- path:  "*"
+  owner: "@amp-buildpacks/leo-maintainers"
+
+package:
+  repositories:   ["docker.io/amp-buildpacks/leo-dist","ghcr.io/paketo-community/leo-dist"]
+  register:       true
+  registry_token: ${{ secrets.AMP_BOT_GITHUB_TOKEN }}
+
+docker_credentials:
+  - registry: ghcr.io
+    username: _json_key
+    password: ${{ secrets.GCR_PUSH_BOT_JSON_KEY }}
+  - registry: docker.io
+    username: ${{ secrets.AMP_BUILDPACKS_DOCKERHUB_USERNAME }}
+    password: ${{ secrets.AMP_BUILDPACKS_DOCKERHUB_PASSWORD }}
