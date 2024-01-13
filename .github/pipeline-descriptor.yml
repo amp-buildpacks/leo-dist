@@ -4,7 +4,7 @@ github:
 
 package:
   repositories:   ["ghcr.io/amp-buildpacks/leo-dist"]
-  register:       true
+  register:       false
   registry_token: ${{ secrets.AMP_BUILDPACKS_BOT_GITHUB_TOKEN }}
 
 docker_credentials:
