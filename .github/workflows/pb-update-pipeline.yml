@@ -13,9 +13,6 @@ jobs:
         name: Update Pipeline
         runs-on:
             - ubuntu-latest
-        permissions:
-          contents: write
-          pull-requests: write
         steps:
             - uses: actions/setup-go@v4
               with:
