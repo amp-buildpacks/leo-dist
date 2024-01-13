@@ -67,7 +67,7 @@ jobs:
                 printf "release-notes<<%s\n%s\n%s\n" "${DELIMITER}" "${RELEASE_NOTES}" "${DELIMITER}" >> "${GITHUB_OUTPUT}" # see https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
               env:
                 DESCRIPTOR: .github/pipeline-descriptor.yml
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                AMP_BUILDPACKS_BOT_GITHUB_TOKEN: ${{ secrets.AMP_BUILDPACKS_BOT_GITHUB_TOKEN }}
             - uses: peter-evans/create-pull-request@v5
               with:
                 author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
@@ -87,4 +87,4 @@ jobs:
                 labels: semver:patch, type:task
                 signoff: true
                 title: Bump pipeline from ${{ steps.pipeline.outputs.old-version }} to ${{ steps.pipeline.outputs.new-version }}
-                token: ${{ secrets.GITHUB_TOKEN }}
+                token: ${{ secrets.AMP_BUILDPACKS_BOT_GITHUB_TOKEN }}
