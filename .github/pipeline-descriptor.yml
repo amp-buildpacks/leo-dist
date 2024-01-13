@@ -1,0 +1,13 @@
+github:
+  username: ${{ github.actor }}
+  token:    ${{ secrets.GITHUB_TOKEN }}
+
+package:
+  repositories:   ["ghcr.io/amp-buildpacks/leo-dist"]
+  register:       true
+  registry_token: ${{ secrets.GITHUB_TOKEN }}
+
+docker_credentials:
+  - registry: ghcr.io
+    username: ${{ github.actor }}
+    password: ${{ secrets.GITHUB_TOKEN }}

@@ -28,7 +28,7 @@ api = "0.8"
     uri = "https://github.com/amp-buildpacks/leo-dist/blob/main/LICENSE"
 
 [metadata]
-  include-files = ["LICENSE", "NOTICE", "README.md", "bin/build", "bin/detect", "bin/main", "buildpack.toml"]
+  include-files = ["LICENSE", "README.md", "bin/build", "bin/detect", "bin/main", "buildpack.toml"]
   pre-package = "scripts/build.sh"
 
   [[metadata.configurations]]
