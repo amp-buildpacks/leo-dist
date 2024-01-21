@@ -129,7 +129,7 @@ func (r Leo) BuildProcessTypes(enableProcess string) ([]libcnb.Process, error) {
 		processes = append(processes, libcnb.Process{
 			Type:      "web",
 			Command:   "leo",
-			Arguments: []string{"build"},
+			Arguments: []string{"run"},
 			Default:   true,
 		})
 	}
