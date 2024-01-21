@@ -70,18 +70,21 @@ func (r Leo) Contribute(layer libcnb.Layer) (libcnb.Layer, error) {
 			return libcnb.Layer{}, fmt.Errorf("unable to set $PATH\n%w", err)
 		}
 
-		buf := &bytes.Buffer{}
-		if err := r.Executor.Execute(effect.Execution{
-			Command: file,
-			Args:    []string{"-V"},
-			Stdout:  buf,
-			Stderr:  buf,
-		}); err != nil {
-			return libcnb.Layer{}, fmt.Errorf("error executing '%s -V':\n Combined Output: %s: \n%w", file, buf.String(), err)
+		// compile contract
+		r.Logger.Bodyf("Compiling contracts by %s build", file)
+		if _, err := r.Execute(file, []string{"build"}); err != nil {
+			return libcnb.Layer{}, fmt.Errorf("unable to compile contract\n%w", err)
+		}
+
+		// get version
+		buf, err := r.Execute(file, []string{"-V"})
+		if err != nil {
+			return libcnb.Layer{}, fmt.Errorf("unable to get %s version: %s\n%w", file, buf.String(), err)
 		}
 		ver := strings.Split(strings.TrimSpace(buf.String()), " ")
 		r.Logger.Bodyf("Checking %s version: %s", file, ver[1])
 
+		// generate SBOM
 		sbomPath := layer.SBOMPath(libcnb.SyftJSON)
 		dep := sbom.NewSyftDependency(layer.Path, []sbom.SyftArtifact{
 			{
@@ -106,14 +109,28 @@ func (r Leo) Contribute(layer libcnb.Layer) (libcnb.Layer, error) {
 	})
 }
 
+func (r Leo) Execute(command string, args []string) (*bytes.Buffer, error) {
+	buf := &bytes.Buffer{}
+	if err := r.Executor.Execute(effect.Execution{
+		Command: command,
+		Args:    args,
+		Stdout:  buf,
+		Stderr:  buf,
+	}); err != nil {
+		return buf, fmt.Errorf("%s: %w", buf.String(), err)
+	}
+	return buf, nil
+}
+
 func (r Leo) BuildProcessTypes(enableProcess string) ([]libcnb.Process, error) {
 	processes := []libcnb.Process{}
 
 	if enableProcess == "true" {
 		processes = append(processes, libcnb.Process{
-			Type:    "web",
-			Command: "leo run",
-			Default: true,
+			Type:      "web",
+			Command:   "leo",
+			Arguments: []string{"build"},
+			Default:   true,
 		})
 	}
 	return processes, nil
