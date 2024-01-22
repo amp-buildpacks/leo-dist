@@ -46,9 +46,6 @@ func (d Detect) Detect(context libcnb.DetectContext) (libcnb.DetectResult, error
 				Provides: []libcnb.BuildPlanProvide{
 					{Name: PlanEntryLeo},
 				},
-				Requires: []libcnb.BuildPlanRequire{
-					{Name: PlanEntryLeo},
-				},
 			},
 		},
 	}, nil
