@@ -26,7 +26,6 @@ import (
 	"github.com/paketo-buildpacks/libpak/bard"
 	"github.com/paketo-buildpacks/libpak/crush"
 	"github.com/paketo-buildpacks/libpak/effect"
-	"github.com/paketo-buildpacks/libpak/sbom"
 	"github.com/paketo-buildpacks/libpak/sherpa"
 )
 
@@ -59,7 +58,7 @@ func (r Leo) Contribute(layer libcnb.Layer) (libcnb.Layer, error) {
 			return libcnb.Layer{}, fmt.Errorf("unable to expand %s\n%w", artifact.Name(), err)
 		}
 
-		file := filepath.Join(bin, "leo")
+		file := filepath.Join(bin, PlanEntryLeo)
 		r.Logger.Bodyf("Setting %s as executable", file)
 		if err := os.Chmod(file, 0755); err != nil {
 			return libcnb.Layer{}, fmt.Errorf("unable to chmod %s\n%w", file, err)
@@ -71,40 +70,19 @@ func (r Leo) Contribute(layer libcnb.Layer) (libcnb.Layer, error) {
 		}
 
 		// compile contract
-		r.Logger.Bodyf("Compiling contracts by %s build", file)
-		if _, err := r.Execute(file, []string{"build"}); err != nil {
+		r.Logger.Bodyf("Compiling contracts by '%s build'", PlanEntryLeo)
+		if _, err := r.Execute(PlanEntryLeo, []string{"build"}); err != nil {
 			return libcnb.Layer{}, fmt.Errorf("unable to compile contract\n%w", err)
 		}
 
 		// get version
-		buf, err := r.Execute(file, []string{"-V"})
+		buf, err := r.Execute(PlanEntryLeo, []string{"-V"})
 		if err != nil {
-			return libcnb.Layer{}, fmt.Errorf("unable to get %s version: %s\n%w", file, buf.String(), err)
+			return libcnb.Layer{}, fmt.Errorf("unable to get %s version: %s\n%w", PlanEntryLeo, buf.String(), err)
 		}
 		ver := strings.Split(strings.TrimSpace(buf.String()), " ")
-		r.Logger.Bodyf("Checking %s version: %s", file, ver[1])
+		r.Logger.Bodyf("Checking %s version: %s", PlanEntryLeo, ver[1])
 
-		// generate SBOM
-		sbomPath := layer.SBOMPath(libcnb.SyftJSON)
-		dep := sbom.NewSyftDependency(layer.Path, []sbom.SyftArtifact{
-			{
-				ID:      "leo",
-				Name:    "Leo",
-				Version: ver[1],
-				Type:    "UnknownPackage",
-				FoundBy: "amp-buildpacks/leo-dist",
-				Locations: []sbom.SyftLocation{
-					{Path: "amp-buildpacks/leo-dist/leo/leo.go"},
-				},
-				Licenses: []string{"GNU"},
-				CPEs:     []string{fmt.Sprintf("cpe:2.3:a:leo:leo:%s:*:*:*:*:*:*:*", ver[1])},
-				PURL:     fmt.Sprintf("pkg:generic/leo-dist@%s", ver[1]),
-			},
-		})
-		r.Logger.Debugf("Writing Syft SBOM at %s: %+v", sbomPath, dep)
-		if err := dep.WriteTo(sbomPath); err != nil {
-			return libcnb.Layer{}, fmt.Errorf("unable to write SBOM\n%w", err)
-		}
 		return layer, nil
 	})
 }
@@ -120,20 +98,6 @@ func (r Leo) Execute(command string, args []string) (*bytes.Buffer, error) {
 		return buf, fmt.Errorf("%s: %w", buf.String(), err)
 	}
 	return buf, nil
-}
-
-func (r Leo) BuildProcessTypes(enableProcess string) ([]libcnb.Process, error) {
-	processes := []libcnb.Process{}
-
-	if enableProcess == "true" {
-		processes = append(processes, libcnb.Process{
-			Type:      "web",
-			Command:   "leo",
-			Arguments: []string{"run"},
-			Default:   true,
-		})
-	}
-	return processes, nil
 }
 
 func (r Leo) Name() string {

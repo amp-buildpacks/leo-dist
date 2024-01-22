@@ -30,40 +30,40 @@ func (b Build) Build(context libcnb.BuildContext) (libcnb.BuildResult, error) {
 	b.Logger.Title(context.Buildpack)
 	result := libcnb.NewBuildResult()
 
-	cr, err := libpak.NewConfigurationResolver(context.Buildpack, &b.Logger)
-	if err != nil {
-		return libcnb.BuildResult{}, fmt.Errorf("unable to create configuration resolver\n%w", err)
+	pr := libpak.PlanEntryResolver{Plan: context.Plan}
+
+	if _, ok, err := pr.Resolve(PlanEntryLeo); err != nil {
+		return libcnb.BuildResult{}, fmt.Errorf("unable to resolve Leo plan entry\n%w", err)
+	} else if ok {
+		cr, err := libpak.NewConfigurationResolver(context.Buildpack, &b.Logger)
+		if err != nil {
+			return libcnb.BuildResult{}, fmt.Errorf("unable to create configuration resolver\n%w", err)
+		}
+
+		dc, err := libpak.NewDependencyCache(context)
+		if err != nil {
+			return libcnb.BuildResult{}, fmt.Errorf("unable to create dependency cache\n%w", err)
+		}
+		dc.Logger = b.Logger
+
+		dr, err := libpak.NewDependencyResolver(context)
+		if err != nil {
+			return libcnb.BuildResult{}, fmt.Errorf("unable to create dependency resolver\n%w", err)
+		}
+
+		// install leo
+		v, _ := cr.Resolve("BP_LEO_VERSION")
+		libc, _ := cr.Resolve("BP_LEO_LIBC")
+
+		leoDependency, err := dr.Resolve(fmt.Sprintf("%s-%s", PlanEntryLeo, libc), v)
+		if err != nil {
+			return libcnb.BuildResult{}, fmt.Errorf("unable to find dependency\n%w", err)
+		}
+
+		leoLayer := NewLeo(leoDependency, dc)
+		leoLayer.Logger = b.Logger
+
+		result.Layers = append(result.Layers, leoLayer)
 	}
-
-	dc, err := libpak.NewDependencyCache(context)
-	if err != nil {
-		return libcnb.BuildResult{}, fmt.Errorf("unable to create dependency cache\n%w", err)
-	}
-	dc.Logger = b.Logger
-
-	dr, err := libpak.NewDependencyResolver(context)
-	if err != nil {
-		return libcnb.BuildResult{}, fmt.Errorf("unable to create dependency resolver\n%w", err)
-	}
-
-	// install leo
-	v, _ := cr.Resolve("BP_LEO_VERSION")
-	libc, _ := cr.Resolve("BP_LEO_LIBC")
-
-	leoDependency, err := dr.Resolve(fmt.Sprintf("leo-%s", libc), v)
-	if err != nil {
-		return libcnb.BuildResult{}, fmt.Errorf("unable to find dependency\n%w", err)
-	}
-
-	leoLayer := NewLeo(leoDependency, dc)
-	leoLayer.Logger = b.Logger
-
-	enableProcess, _ := cr.Resolve("BP_ENABLE_LEO_PROCESS")
-	result.Processes, err = leoLayer.BuildProcessTypes(enableProcess)
-	if err != nil {
-		return libcnb.BuildResult{}, fmt.Errorf("unable to build list of process types\n%w", err)
-	}
-	result.Layers = append(result.Layers, leoLayer)
-
 	return result, nil
 }

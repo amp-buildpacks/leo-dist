@@ -33,12 +33,6 @@ api = "0.8"
 
   [[metadata.configurations]]
     build = true
-    default = "false"
-    description = "enable the Leo run process"
-    name = "BP_ENABLE_LEO_PROCESS"
-
-  [[metadata.configurations]]
-    build = true
     default = "1.10.0"
     description = "the Leo version"
     name = "BP_LEO_VERSION"
