@@ -1,6 +1,6 @@
 module github.com/amp-buildpacks/leo-dist
 
-go 1.22
+go 1.23
 
 require (
 	github.com/buildpacks/libcnb v1.30.3
